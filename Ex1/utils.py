@@ -9,6 +9,10 @@ def cross_entropy_loss(y_true:np.ndarray, y_pred:np.ndarray) -> float:
     loss = -np.mean(np.log(true_prob + epsilon))
     return loss
 
+
+
+
+
 def l2_regularization_gradient(weights:np.ndarray, lambda_:float) -> np.ndarray:
     return lambda_ * weights
 
