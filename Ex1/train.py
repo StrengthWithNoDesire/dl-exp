@@ -8,7 +8,7 @@ from model import Model, FullyConnectedLayer
 def main():
 
     rd=42
-    epochs = 2
+    epochs = 30
     batch_size = 64
     learning_rate = 1e-2
     optimizer = 'adam'

@@ -9,10 +9,10 @@ def main():
 
     rd=42
     epochs = 15
-    batch_size = 32
-    learning_rate = 2*1e-2
+    batch_size = 128
+    learning_rate = 0.005
     optimizer = 'adam'
-    l2_reg = False
+    l2_reg = True
     l2_lambda = 1e-3
 
 
@@ -34,9 +34,9 @@ def main():
     print("数据集划分完成")
 
     model = Model(learning_rate=learning_rate, optimizer=optimizer)
-    model.add_layer(layer_input_dim=784, layer_output_dim=128, initialize='xavier', activation='tanh', l2=l2_reg, l2_lambda=l2_lambda)
-    model.add_layer(layer_input_dim=128, layer_output_dim=128, initialize='xavier', activation='tanh', l2=l2_reg, l2_lambda=l2_lambda)
-    model.add_layer(layer_input_dim=128, layer_output_dim=10, initialize='xavier', activation='tanh', l2=l2_reg, l2_lambda=l2_lambda)
+    model.add_layer(layer_input_dim=784, layer_output_dim=512, initialize='xavier', activation='leaky_relu', l2=l2_reg, l2_lambda=l2_lambda)
+    model.add_layer(layer_input_dim=512, layer_output_dim=256, initialize='xavier', activation='leaky_relu', l2=l2_reg, l2_lambda=l2_lambda)
+    model.add_layer(layer_input_dim=256, layer_output_dim=10, initialize='xavier', activation='linear', l2=l2_reg, l2_lambda=l2_lambda)
 
     print("模型构建完成, 开始训练")
 

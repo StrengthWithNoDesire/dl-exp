@@ -1,5 +1,8 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+import pandas as pd
 
 def cross_entropy_loss(y_true:np.ndarray, y_pred:np.ndarray) -> float:
     m = y_true.shape[0]
@@ -45,11 +48,6 @@ def sigmoid_differential(z:np.ndarray) -> np.ndarray:
 def relu_differential(z:np.ndarray) -> np.ndarray:
     return np.where(z > 0, 1, 0)
 
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import confusion_matrix
-import pandas as pd
 
 def plot_loss_accuracy(train_losses, val_losses, train_accuracies, val_accuracies, epochs=None):
     """
