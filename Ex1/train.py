@@ -15,7 +15,7 @@ def main():
 
     l2_reg = True
     if l2_reg:
-        l2_lambda = 1e-4
+        l2_lambda = 1e-3
 
 
     mnist = fetch_openml('mnist_784', version=1)
