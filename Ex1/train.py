@@ -24,6 +24,7 @@ def main():
 
     # 对X进行归一化
     X = X / 255.0
+    
     print("归一化完成")
 
     # one-hot编码
