@@ -8,7 +8,7 @@ from model import Model, FullyConnectedLayer
 def main():
 
     rd=42
-    epochs = 15
+    epochs = 150
     batch_size = 128
     learning_rate = 0.005
     optimizer = 'adam'
@@ -77,7 +77,7 @@ def main():
             epoch_train_acc += accuracy
             num_batches += 1
 
-            print(f"Epoch {epoch + 1}, Batch {i // batch_size + 1}, Loss: {loss:.4f}, Accuracy: {accuracy:.4f}")
+            # print(f"Epoch {epoch + 1}, Batch {i // batch_size + 1}, Loss: {loss:.4f}, Accuracy: {accuracy:.4f}")
 
             model.backward(y_pred_probs - y_batch)
 
@@ -93,7 +93,7 @@ def main():
         if l2_reg:
             l2_loss = sum(l2_regularization_loss(layer.W, l2_lambda) for layer in model.layers)
             val_loss += l2_loss
-        val_accuracy = np.mean(y_val_pred == np.argmax(y_val, axis=1))
+        val_accuracy = np.mean(y_val_pred == y_val_label)
 
         val_losses.append(val_loss)
         val_accuracies.append(val_accuracy)
@@ -102,9 +102,10 @@ def main():
 
         if epoch == epochs - 1:  # 最后一个epoch结束后绘制混淆矩阵
            plot_confusion_matrix(y_val_label, y_val_pred)
+           plot_misclassified_samples(X_val, y_val_label, y_val_pred, num_samples=10, image_shape=(28, 28), random_seed=rd)
 
     plot_loss_accuracy(train_losses, val_losses, train_accuracies, val_accuracies, epochs)
-
+    
 
 
 

@@ -126,20 +126,30 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title='Confusion Matrix',
     plt.title(title)
     plt.show()
 
+
+
 def plot_misclassified_samples(X_test, y_true, y_pred, class_names=None, num_samples=10,
                                 image_shape=None, random_seed=None):
     """
     可视化错误分类的样本
     参数：
-        X_test: 测试数据，形状 (n_samples, ...) 可以是图像特征向量或原始图像
-        y_true: 真实标签，one-hot或类别索引
-        y_pred: 预测标签，one-hot或类别索引
+        X_test: 测试数据，形状 (n_samples, ...) 可以是图像特征向量或原始图像，支持 pandas DataFrame/Series 或 numpy 数组
+        y_true: 真实标签，one-hot或类别索引，支持 pandas Series/DataFrame 或 numpy 数组
+        y_pred: 预测标签，格式同 y_true
         class_names: list, 类别名称（可选）
         num_samples: int, 最多显示的样本数
         image_shape: tuple, 如果X_test是扁平化图像，指定形状如 (28,28)；若为None且数据是2D则尝试直接显示
         random_seed: int, 随机种子，用于复现
     """
-    # 转换为类别索引
+    # 将 pandas 对象转换为 numpy 数组
+    if hasattr(X_test, 'values'):
+        X_test = X_test.values
+    if hasattr(y_true, 'values'):
+        y_true = y_true.values
+    if hasattr(y_pred, 'values'):
+        y_pred = y_pred.values
+
+    # 转换为类别索引（如果是one-hot）
     if y_true.ndim == 2 and y_true.shape[1] > 1:
         y_true = np.argmax(y_true, axis=1)
     if y_pred.ndim == 2 and y_pred.shape[1] > 1:
@@ -164,14 +174,14 @@ def plot_misclassified_samples(X_test, y_true, y_pred, class_names=None, num_sam
     plt.figure(figsize=(cols * 3, rows * 3))
 
     for i, idx in enumerate(selected_indices):
-        sample = X_test[idx]
+        sample = X_test[idx]  # 现在 X_test 是 numpy 数组，索引安全
 
         # 处理图像数据：如果提供了image_shape且样本是一维，尝试重塑
         if image_shape is not None and sample.ndim == 1:
             try:
                 sample = sample.reshape(image_shape)
             except:
-                pass  # 若重塑失败则保持原样
+                pass
 
         plt.subplot(rows, cols, i + 1)
 
@@ -179,7 +189,7 @@ def plot_misclassified_samples(X_test, y_true, y_pred, class_names=None, num_sam
         if sample.ndim == 2:  # 灰度图像
             plt.imshow(sample, cmap='gray')
             plt.axis('off')
-        elif sample.ndim == 3 and sample.shape[-1] in [1, 3, 4]:  # 彩色图像（通道在最后）
+        elif sample.ndim == 3 and sample.shape[-1] in [1, 3, 4]:  # 彩色图像
             if sample.shape[-1] == 1:
                 plt.imshow(sample.squeeze(), cmap='gray')
             else:
